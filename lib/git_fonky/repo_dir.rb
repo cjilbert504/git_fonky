@@ -19,7 +19,6 @@ module GitFonky
       else
         failed_pull_msg
       end
-      puts "\n\n"
     end
 
     def on_invalid_branch?

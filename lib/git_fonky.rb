@@ -19,6 +19,8 @@ module GitFonky
 
           repo.sync
         end
+
+        puts "\n\n"
       end
     end
   end
