@@ -6,9 +6,9 @@ module GitFonky
     attr_reader :command, :dirname, :reporter
 
     def initialize(dirname)
-      @command = Command.new(self)
       @dirname = dirname
       @reporter = Reporter.new(self)
+      @command = Command.new(repo_dir: self, reporter: reporter)
     end
 
     def branch
