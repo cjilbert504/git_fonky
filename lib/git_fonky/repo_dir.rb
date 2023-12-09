@@ -1,9 +1,12 @@
+require_relative "reporter"
+
 module GitFonky
   class RepoDir
-    attr_reader :dirname
+    attr_reader :dirname, :reporter
 
     def initialize(dirname)
       @dirname = dirname
+      @reporter = Reporter.new(self)
     end
 
     def branch
@@ -12,8 +15,8 @@ module GitFonky
 
     def sync
       Dir.chdir dirname do
-        announce_update
-        return invalid_branch_msg if on_invalid_branch?
+        reporter.announce_update
+        return reporter.invalid_branch_msg if on_invalid_branch?
 
         fetch_upstream
         pull_upstream
@@ -29,14 +32,6 @@ module GitFonky
       !branch.match?(/(main|master)/)
     end
 
-    def invalid_branch_msg
-      msg = "You are not on the main/master branch. Please checkout the main/master branch and try again."
-      sub_msg = "-----> skipping #{dirname} | #{branch} branch <-----"
-      border = calculate_border_for(msg, "*")
-
-      output_border_and_msg(border, msg, sub_msg)
-    end
-
     private
 
     def failed_pull_msg
@@ -44,13 +39,6 @@ module GitFonky
       border = calculate_border_for(msg, "*")
 
       output_border_and_msg(border, msg)
-    end
-
-    def announce_update
-      msg = "Updating -> #{dirname} | #{branch} branch "
-      border = calculate_border_for(msg, "=")
-
-      output_border_and_msg(border, msg, warn: false)
     end
 
     def announce_success
@@ -74,22 +62,6 @@ module GitFonky
     def push_to_origin
       announce("pushing", "to", "origin")
       `git push origin #{branch} 2>&1`
-    end
-
-    def warning_header
-      "WARNING"
-    end
-
-    def calculate_border_for(msg, border_char)
-      border_char * (msg.length + 20)
-    end
-
-    def output_border_and_msg(border, msg, sub_msg = nil, warn: true)
-      puts border
-      puts warning_header.center(border.length) if warn
-      puts sub_msg.center(border.length) if sub_msg
-      puts msg.center(border.length)
-      puts border
     end
   end
 end
