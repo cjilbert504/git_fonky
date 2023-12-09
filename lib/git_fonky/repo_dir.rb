@@ -13,17 +13,16 @@ module GitFonky
     def sync
       Dir.chdir dirname do
         announce_update
-        next invalid_branch_msg if on_invalid_branch?
+        return invalid_branch_msg if on_invalid_branch?
+
         fetch_upstream
         pull_upstream
-        if $?.success?
-          push_to_origin
-          announce_success
-        else
-          failed_pull_msg
-        end
+
+        return failed_pull_msg unless $?.success?
+
+        push_to_origin
+        announce_success
       end
-      puts "\n\n"
     end
 
     def on_invalid_branch?
@@ -33,34 +32,25 @@ module GitFonky
     def invalid_branch_msg
       msg = "You are not on the main/master branch. Please checkout the main/master branch and try again."
       sub_msg = "-----> skipping #{dirname} | #{branch} branch <-----"
-      border = border_for(msg, "*")
+      border = calculate_border_for(msg, "*")
 
-      puts border
-      puts warning_header.center(border.length)
-      puts msg.center(border.length)
-      puts sub_msg.center(border.length)
-      puts border
+      output_border_and_msg(border, msg, sub_msg)
     end
 
     private
 
     def failed_pull_msg
       msg = "-----> Failed to pull upstream #{branch}. Moving on to next repo. <-----"
-      border = border_for(msg, "*")
+      border = calculate_border_for(msg, "*")
 
-      puts border
-      puts warning_header.center(border.length)
-      puts msg.center(border.length)
-      puts border
+      output_border_and_msg(border, msg)
     end
 
     def announce_update
       msg = "Updating -> #{dirname} | #{branch} branch "
-      border = border_for(msg, "=")
+      border = calculate_border_for(msg, "=")
 
-      puts border
-      puts msg.center(border.length)
-      puts border
+      output_border_and_msg(border, msg, warn: false)
     end
 
     def announce_success
@@ -90,8 +80,16 @@ module GitFonky
       "WARNING"
     end
 
-    def border_for(msg, border_char)
+    def calculate_border_for(msg, border_char)
       border_char * (msg.length + 20)
+    end
+
+    def output_border_and_msg(border, msg, sub_msg = nil, warn: true)
+      puts border
+      puts warning_header.center(border.length) if warn
+      puts sub_msg.center(border.length) if sub_msg
+      puts msg.center(border.length)
+      puts border
     end
   end
 end

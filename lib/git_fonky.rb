@@ -11,6 +11,7 @@ module GitFonky
     Dir.chdir "#{Dir.home}/code" do
       WORK_REPO_NAMES.each do |dir|
         RepoDir.new(dir).sync
+        puts "\n\n"
       end
     end
   end
