@@ -1,10 +1,12 @@
 require_relative "reporter"
+require_relative "command"
 
 module GitFonky
   class RepoDir
-    attr_reader :dirname, :reporter
+    attr_reader :command, :dirname, :reporter
 
     def initialize(dirname)
+      @command = Command.new(self)
       @dirname = dirname
       @reporter = Reporter.new(self)
     end
@@ -18,12 +20,12 @@ module GitFonky
         reporter.announce_update
         return reporter.invalid_branch_msg if on_invalid_branch?
 
-        fetch_upstream
-        pull_upstream
+        command.fetch_upstream
+        command.pull_upstream
 
         return failed_pull_msg unless $?.success?
 
-        push_to_origin
+        command.push_to_origin
         announce_success
       end
     end
@@ -43,25 +45,6 @@ module GitFonky
 
     def announce_success
       puts "-----> Successfully updated #{dirname} | #{branch} branch"
-    end
-
-    def announce(action, direction = "from", remote = "upstream")
-      puts "-----> #{action} #{direction} #{remote} #{branch}"
-    end
-
-    def fetch_upstream
-      announce("fetching")
-      `git fetch upstream #{branch} 2>&1`
-    end
-
-    def pull_upstream
-      announce("pulling")
-      `git pull upstream #{branch} 2>&1`
-    end
-
-    def push_to_origin
-      announce("pushing", "to", "origin")
-      `git push origin #{branch} 2>&1`
     end
   end
 end
