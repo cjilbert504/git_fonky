@@ -6,6 +6,10 @@ module GitFonky
       @repo_dir = repo_dir
     end
 
+    def announce(action, direction = "from", remote = "upstream")
+      puts "-----> #{action} #{direction} #{remote} #{repo_dir.branch}"
+    end
+
     def announce_success
       puts "-----> Successfully updated #{repo_dir.dirname} | #{repo_dir.branch} branch"
     end

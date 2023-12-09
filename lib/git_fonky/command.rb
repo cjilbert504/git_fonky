@@ -1,9 +1,10 @@
 module GitFonky
   class Command
-    attr_reader :repo_dir
+    attr_reader :repo_dir, :reporter
 
-    def initialize(repo_dir)
+    def initialize(repo_dir:, reporter:)
       @repo_dir = repo_dir
+      @reporter = reporter
     end
 
     def current_branch
@@ -11,24 +12,18 @@ module GitFonky
     end
 
     def fetch_upstream
-      announce("fetching")
+      reporter.announce("fetching")
       `git fetch upstream #{repo_dir.branch} 2>&1`
     end
 
     def pull_upstream
-      announce("pulling")
+      reporter.announce("pulling")
       `git pull upstream #{repo_dir.branch} 2>&1`
     end
 
     def push_to_origin
-      announce("pushing", "to", "origin")
+      reporter.announce("pushing", "to", "origin")
       `git push origin #{repo_dir.branch} 2>&1`
-    end
-
-    private
-
-    def announce(action, direction = "from", remote = "upstream")
-      puts "-----> #{action} #{direction} #{remote} #{repo_dir.branch}"
     end
   end
 end
