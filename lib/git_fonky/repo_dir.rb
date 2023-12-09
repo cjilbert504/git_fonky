@@ -12,7 +12,7 @@ module GitFonky
     end
 
     def branch
-      @branch ||= `git branch --show-current`.strip
+      @branch ||= command.current_branch
     end
 
     def sync

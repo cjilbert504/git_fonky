@@ -6,6 +6,10 @@ module GitFonky
       @repo_dir = repo_dir
     end
 
+    def current_branch
+      `git branch --show-current`.strip
+    end
+
     def fetch_upstream
       announce("fetching")
       `git fetch upstream #{repo_dir.branch} 2>&1`
