@@ -10,17 +10,7 @@ module GitFonky
   def self.sync_repos
     Dir.chdir "#{Dir.home}/code" do
       WORK_REPO_NAMES.each do |dir|
-        repo = RepoDir.new(dir)
-
-        Dir.chdir repo.dirname do
-          puts repo.dirname.upcase
-
-          next repo.invalid_branch_msg if repo.on_invalid_branch?
-
-          repo.sync
-        end
-
-        puts "\n\n"
+        RepoDir.new(dir).sync
       end
     end
   end

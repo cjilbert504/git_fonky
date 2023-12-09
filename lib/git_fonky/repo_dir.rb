@@ -11,14 +11,19 @@ module GitFonky
     end
 
     def sync
-      announce_update
-      fetch_upstream
-      pull_upstream
-      if $?.success?
-        push_to_origin
-      else
-        failed_pull_msg
+      Dir.chdir dirname do
+        announce_update
+        next invalid_branch_msg if on_invalid_branch?
+        fetch_upstream
+        pull_upstream
+        if $?.success?
+          push_to_origin
+          announce_success
+        else
+          failed_pull_msg
+        end
       end
+      puts "\n\n"
     end
 
     def on_invalid_branch?
@@ -50,10 +55,16 @@ module GitFonky
     end
 
     def announce_update
-      update_msg = "Updating -> #{dirname} | #{branch} branch "
-      puts "=" * update_msg.length
-      puts update_msg
-      puts "=" * update_msg.length
+      msg = "Updating -> #{dirname} | #{branch} branch "
+      border = border_for(msg, "=")
+
+      puts border
+      puts msg.center(border.length)
+      puts border
+    end
+
+    def announce_success
+      puts "-----> Successfully updated #{dirname} | #{branch} branch"
     end
 
     def announce(action, direction = "from", remote = "upstream")
@@ -61,7 +72,7 @@ module GitFonky
     end
 
     def fetch_upstream
-      # announce("fetching")
+      announce("fetching")
       `git fetch upstream #{branch} 2>&1`
     end
 
