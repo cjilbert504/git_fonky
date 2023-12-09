@@ -6,6 +6,10 @@ module GitFonky
       @repo_dir = repo_dir
     end
 
+    def announce_success
+      puts "-----> Successfully updated #{repo_dir.dirname} | #{repo_dir.branch} branch"
+    end
+
     def announce_update
       msg = "Updating -> #{repo_dir.dirname} | #{repo_dir.branch} branch "
       border = calculate_border_for("=", msg)
@@ -19,6 +23,13 @@ module GitFonky
       border = calculate_border_for("*", msg)
 
       output_border_and_msg(border, msg, sub_msg)
+    end
+
+    def failed_pull_msg
+      msg = "-----> Failed to pull upstream #{branch}. Moving on to next repo. <-----"
+      border = calculate_border_for(msg, "*")
+
+      output_border_and_msg(border, msg)
     end
 
     private
