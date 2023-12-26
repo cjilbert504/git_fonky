@@ -1,57 +1,51 @@
+require_relative "message_formatter"
 module GitFonky
   class Reporter
-    attr_reader :repo_dir
+    attr_reader :formatter, :repo_name, :repo_branch
 
-    def initialize(repo_dir)
-      @repo_dir = repo_dir
+    def initialize(repo_name, repo_branch, formatter = MessageFormatter)
+      @repo_name = repo_name
+      @repo_branch = repo_branch
+      @formatter = formatter.new
     end
 
     def announce(action, direction = "from", remote = "upstream")
-      puts "-----> #{action} #{direction} #{remote} #{repo_dir.branch}"
+      STDERR.puts "-----> #{action} #{direction} #{remote} #{repo_branch}"
     end
 
-    def announce_success
-      puts "-----> Successfully updated #{repo_dir.dirname} | #{repo_dir.branch} branch"
+    def announce_sync_success
+      puts "-----> Successfully synced #{repo_name} | #{repo_branch} branch"
     end
 
-    def announce_update
-      msg = "Updating -> #{repo_dir.dirname} | #{repo_dir.branch} branch "
-      border = calculate_border_for("=", msg)
-
-      output_border_and_msg(border, msg, warn: false)
+    def announce_sync_attempt
+      msg = "Attempting to sync -> #{repo_name} | #{repo_branch} branch "
+      formatter.message_with_border(msg: msg, border_char: "=", warn: false)
     end
 
     def invalid_branch_msg
       msg = "You are not on the main/master branch. Please checkout the main/master branch and try again."
-      sub_msg = "-----> skipping #{repo_dir.dirname} | #{repo_dir.branch} branch <-----"
-      border = calculate_border_for("*", msg)
+      sub_msg = "-----> skipping #{repo_name} | #{repo_branch} branch <-----"
+      formatter.message_with_border(msg: msg, sub_msg: sub_msg)
+    end
 
-      output_border_and_msg(border, msg, sub_msg)
+    def failed_fetch_msg
+      msg = "-----> Failed to fetch from upstream #{repo_branch}. Moving on to next repo. <-----"
+      formatter.message_with_border(msg: msg)
     end
 
     def failed_pull_msg
-      msg = "-----> Failed to pull upstream #{branch}. Moving on to next repo. <-----"
-      border = calculate_border_for(msg, "*")
-
-      output_border_and_msg(border, msg)
+      msg = "-----> Failed to pull from upstream #{repo_branch}. Moving on to next repo. <-----"
+      formatter.message_with_border(msg: msg)
     end
 
-    private
-
-    def calculate_border_for(border_char, msg)
-      border_char * (msg.length + 20)
+    def failed_push_msg
+      msg = "-----> Failed to push to origin #{repo_branch}. Moving on to next repo. <-----"
+      formatter.message_with_border(msg: msg)
     end
 
-    def output_border_and_msg(border, msg, sub_msg = nil, warn: true)
-      puts border
-      puts warning_header.center(border.length) if warn
-      puts msg.center(border.length)
-      puts sub_msg.center(border.length) if sub_msg
-      puts border
-    end
-
-    def warning_header
-      "WARNING"
+    def failed_sync_msg
+      msg = "-----> Failed to sync #{repo_name} | #{repo_branch}. Moving on to next repo. <-----"
+      formatter.message_with_border(msg: msg)
     end
   end
 end
