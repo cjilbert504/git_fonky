@@ -7,11 +7,13 @@ require_relative "git_fonky/repo_names"
 module GitFonky
   class Error < StandardError; end
 
+  GFONK_DIR = ENV["GFONK_DIR"] || "#{Dir.home}/code"
+
   def self.sync_repos
-    Dir.chdir "#{Dir.home}/code" do
+    Dir.chdir(GFONK_DIR)do
       REPO_NAMES.each do |dir|
         RepoDir.sync(dir)
-        puts "\n\n\n"
+        puts "\n" * 3
       end
     end
   end
