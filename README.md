@@ -1,24 +1,31 @@
 # GitFonky
 
-TODO: Delete this and the text below, and describe your gem
-
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/git_fonky`. To experiment with that code, run `bin/console` for an interactive prompt.
+Time to GitFonky! What do we do here you ask? Well, if you're like us, you have numerous repositories that you work on with others and keeping them all up-to-date can be a real drag.
+That's where we come in with the funk! We take care of pulling in all the latest code for each repository you tell us by running one command!
 
 ## Installation
 
-TODO: Replace `UPDATE_WITH_YOUR_GEM_NAME_PRIOR_TO_RELEASE_TO_RUBYGEMS_ORG` with your gem name right after releasing it to RubyGems.org. Please do not do it earlier due to security reasons. Alternatively, replace this section with instructions to install your gem from git if you don't plan to release to RubyGems.org.
-
-Install the gem and add to the application's Gemfile by executing:
-
-    $ bundle add UPDATE_WITH_YOUR_GEM_NAME_PRIOR_TO_RELEASE_TO_RUBYGEMS_ORG
-
-If bundler is not being used to manage dependencies, install the gem by executing:
-
-    $ gem install UPDATE_WITH_YOUR_GEM_NAME_PRIOR_TO_RELEASE_TO_RUBYGEMS_ORG
+`gem install git_fonky`
 
 ## Usage
 
-TODO: Write usage instructions here
+GitFonky uses two environment variables in order to do its thing - `GFONK_DIR` and `GFONK_REPOS`.
+
+### `GFONK_DIR`
+
+Set this environment variable if you wish to override the default directory that GitFonky uses to look for your repositories within. If you do not set this
+environment variable then the defualt is to use the current users HOME directory and then a directory called `/code`. This is would be something like `/Users/somebody/code` done via `"#{Dir.home}/code`.
+
+If you set the `GFONK_DIR` environment variable you should set it to the path to the directory that contains all of the repositories you want to
+stop faking the funk with.
+
+### GFONK_REPOS
+
+This environment variable must be set if you want any funk to happen! The value of this environment variable should be a string of repository names separated
+only by commas (NO SPACES!):
+```bash
+export GFONK_REPOS="repo1,repo2,repo3"
+```
 
 ## Development
 
@@ -28,12 +35,8 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/git_fonky. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/git_fonky/blob/main/CODE_OF_CONDUCT.md).
+Bug reports and pull requests are welcome on the [GitHub page](https://github.com/cjilbert504/git_fonky.) for the gem.
 
 ## License
 
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
-
-## Code of Conduct
-
-Everyone interacting in the GitFonky project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/git_fonky/blob/main/CODE_OF_CONDUCT.md).
