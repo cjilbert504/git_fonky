@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    git_fonky (0.4.0)
+    git_fonky (1.0)
 
 GEM
   remote: https://rubygems.org/
@@ -52,6 +52,7 @@ GEM
     unicode-display_width (2.5.0)
 
 PLATFORMS
+  arm64-darwin-25
   x86_64-darwin-22
   x86_64-linux
 

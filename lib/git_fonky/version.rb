@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 module GitFonky
-  VERSION = "0.6.2"
+  VERSION = "1.0"
 end
