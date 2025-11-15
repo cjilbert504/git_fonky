@@ -1,26 +1,27 @@
 module GitFonky
   class MessageFormatter
-    def message_with_border(**params)
-      border = calculate_border_for(params[:msg], params.delete(:border_char) { "*" })
-      output_border_and_msg(border: border, **params)
+    def output_message(msg, heading: false, warning: true)
+      warn build_message(msg, heading: heading, warning: warning)
     end
 
     private
 
-    def calculate_border_for(msg, border_char)
-      border_char * (msg.length + 20)
-    end
-
-    def output_border_and_msg(border:, msg:, sub_msg: nil, io_stream: STDERR, warn: true)
-      io_stream.puts border
-      io_stream.puts warning_header.center(border.length) if warn
-      io_stream.puts msg.center(border.length)
-      io_stream.puts sub_msg.center(border.length) if sub_msg
-      io_stream.puts border
-    end
-
     def warning_header
-      "WARNING"
+      "WARNING: ".blink
+    end
+
+    def warning_footer
+      " Moving on to next repo."
+    end
+
+    def build_message(msg, heading:, warning:)
+      if warning
+        (warning_header + msg + warning_footer).yellow
+      elsif heading
+        msg.underline
+      else
+        msg.green
+      end
     end
   end
 end

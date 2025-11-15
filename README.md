@@ -27,6 +27,15 @@ only by commas (NO SPACES!):
 export GFONK_REPOS="repo1,repo2,repo3"
 ```
 
+You can also specify a branch to use with a given repository. To specify the branch add a colon after the repository
+name followed by the name of the branch.
+```bash
+export GFONK_REPOS="repo1,repo2:main,repo3:staging"
+```
+
+If you do not specify a branch for a repository then whatever the current branch is that you are on in a given
+repository directory is the branch that will be used to attempt to sync the repository between the remotes.
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
