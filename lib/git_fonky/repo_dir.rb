@@ -3,7 +3,7 @@ require_relative "reporter"
 
 module GitFonky
   class RepoDir
-    def initialize(repo_name: nil, branch: nil, command: Command, reporter: Reporter)
+    def initialize(repo_name = nil, branch = nil, command: Command, reporter: Reporter)
       @repo_name = repo_name
       @command = command.new
       @branch = branch || get_current_branch
@@ -11,9 +11,9 @@ module GitFonky
       @reporter = reporter.new(@repo_name, @branch)
     end
 
-    def self.sync(repo_name:, branch_name:)
+    def self.sync(repo_name, branch_name)
       Dir.chdir(repo_name.to_s) do
-        new(repo_name: repo_name, branch: branch_name).sync
+        new(repo_name, branch_name).sync
       end
     end
 

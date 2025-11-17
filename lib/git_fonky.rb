@@ -12,8 +12,8 @@ module GitFonky
 
   def self.sync_repos
     Dir.chdir(GFONK_DIR) do
-      Repositories.parse_env.each do |repo, branch|
-        RepoDir.sync(repo_name: repo, branch_name: branch)
+      Repositories.parse_env.each do |repo_name, branch_name|
+        RepoDir.sync(repo_name, branch_name)
         puts "\n" * 3
       end
     end
