@@ -16,10 +16,10 @@ GitFonky uses two environment variables in order to do its thing - `GFONK_DIR` a
 Set this environment variable if you wish to override the default directory that GitFonky uses to look for your repositories within. If you do not set this
 environment variable then the defualt is to use the current users HOME directory and then a directory called `/code`. This is would be something like `/Users/somebody/code` done via `"#{Dir.home}/code`.
 
-If you set the `GFONK_DIR` environment variable you should set it to the path to the directory that contains all of the repositories you want to
+If you set the `GFONK_DIR` environment variable you should set it to the full path to the directory that contains all of the repositories you want to
 stop faking the funk with.
 
-### GFONK_REPOS
+### `GFONK_REPOS`
 
 This environment variable must be set if you want any funk to happen! The value of this environment variable should be a string of repository names separated
 only by commas (NO SPACES!):
