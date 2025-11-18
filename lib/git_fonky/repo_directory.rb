@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 require_relative "command"
 require_relative "reporter"
 
 module GitFonky
-  class RepoDir
+  class RepoDirectory
     def initialize(repo_name = nil, branch = nil, command: Command, reporter: Reporter)
       @repo_name = repo_name
       @command = command.new
