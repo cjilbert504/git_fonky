@@ -1,22 +1,21 @@
 # frozen_string_literal: true
 
-require_relative "command"
 require_relative "reporter"
 
 module GitFonky
   class RepoDirectory
-    def initialize(repo_name = nil, branch = nil, command: Command, reporter: Reporter)
-      @repo_name = repo_name
-      @command = command.new
-      @branch = branch || get_current_branch
-      @command.branch_name = @branch
-      @reporter = reporter.new(@repo_name, @branch)
+    def self.sync(repo_config)
+      Dir.chdir(repo_config[:repo].to_s) do
+        new(repo_config).sync
+      end
     end
 
-    def self.sync(repo_name, branch_name)
-      Dir.chdir(repo_name.to_s) do
-        new(repo_name, branch_name).sync
-      end
+    def initialize(repo_config, reporter: Reporter)
+      @repo = repo_config[:repo]
+      @branch = repo_config[:branch] || "main"
+      @origin_remote = repo_config[:origin_remote] || "origin"
+      @fork_remote = repo_config[:fork_remote] || "fork"
+      @reporter = reporter.new(@repo, @branch)
     end
 
     def sync
@@ -30,22 +29,18 @@ module GitFonky
 
     private
 
-    def get_current_branch
-      @command.current_branch
-    end
-
     def announce_sync_attempt
       @reporter.announce_sync_attempt
     end
 
     def pull
-      @command.pull_upstream
-      process_successful? ? @reporter.announce("pulled") : throw(:skip_repo, @reporter.failed_pull_msg)
+      `git pull #{@origin_remote} #{@branch} 2>&1`
+      process_successful? ? @reporter.announce("pulled", "from", "#{@origin_remote}") : throw(:skip_repo, @reporter.failed_pull_msg)
     end
 
     def push
-      @command.push_to_origin
-      process_successful? ? @reporter.announce("pushed", "to", "origin") : throw(:skip_repo, @reporter.failed_push_msg)
+      `git push #{@fork_remote} #{@branch} 2>&1`
+      process_successful? ? @reporter.announce("pushed", "to", "#{@fork_remote}") : throw(:skip_repo, @reporter.failed_push_msg)
     end
 
     def announce_sync_success
