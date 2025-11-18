@@ -1,5 +1,13 @@
+# frozen_string_literal: true
+
 module GitFonky
-  class Repositories
+  class Parser
+    attr_reader :config
+
+    def initialize
+      @config = {}
+    end
+
     def self.parse_env
       new.parse_gfonk_repos_env_var
     rescue NoMethodError
@@ -12,13 +20,19 @@ module GitFonky
     end
 
     def parse_gfonk_repos_env_var
-      ENV["GFONK_REPOS"].split(",").map { |repo_config| repo_config.split(":") }.map do |repo_name, branch_name|
-        if branch_name.nil?
-          [repo_name.to_sym, nil]
-        else
-          [repo_name.to_sym, branch_name]
-        end
-      end.to_h
+      split_repo_and_branch.map do |repo_name, branch_name|
+        @config[repo_name.to_sym] = branch_name
+      end
+
+      self
+    end
+
+    private
+
+    def split_repo_and_branch
+      ENV["GFONK_REPOS"].split(",").map do
+        it.split(":")
+      end
     end
   end
 end
