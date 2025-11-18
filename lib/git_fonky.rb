@@ -2,8 +2,8 @@
 
 require "colorize"
 require_relative "git_fonky/version"
-require_relative "git_fonky/repo_dir"
-require_relative "git_fonky/repositories"
+require_relative "git_fonky/repo_directory"
+require_relative "git_fonky/parser"
 
 module GitFonky
   class Error < StandardError; end
@@ -12,8 +12,8 @@ module GitFonky
 
   def self.sync_repos
     Dir.chdir(GFONK_DIR) do
-      Repositories.parse_env.each do |repo_name, branch_name|
-        RepoDir.sync(repo_name, branch_name)
+      Parser.parse_env.config.each do |repo_name, branch_name|
+        RepoDirectory.sync(repo_name, branch_name)
         puts "\n" * 3
       end
     end
