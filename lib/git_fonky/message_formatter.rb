@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module GitFonky
   class MessageFormatter
     def output_message(msg, heading: false, warning: true)
