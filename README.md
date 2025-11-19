@@ -27,14 +27,16 @@ only by commas (NO SPACES!):
 export GFONK_REPOS="repo1,repo2,repo3"
 ```
 
-You can also specify a branch to use with a given repository. To specify the branch add a colon after the repository
-name followed by the name of the branch.
+You can also specify a branch, origin remote and fork remote to use with a given repository. To specify these add a colon after the repository
+name followed by the name of the branch, origin remote and fork remote.
 ```bash
-export GFONK_REPOS="repo1,repo2:main,repo3:staging"
+export GFONK_REPOS="repo1,repo2:main,repo3:staging:origin_remote:fork_remote"
 ```
 
-If you do not specify a branch for a repository then whatever the current branch is that you are on in a given
-repository directory is the branch that will be used to attempt to sync the repository between the remotes.
+If you do not specify a branch, origin remote or fork remote the following defaults will be used:
+default branch: `main`
+default origin remote: `origin`
+default fork remote: `fork`
 
 
 ### Running the fonk
