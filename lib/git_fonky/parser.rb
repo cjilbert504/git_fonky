@@ -24,8 +24,8 @@ module GitFonky
     private
 
     def split_repo_details
-      ENV["GFONK_REPOS"].split(",").map do
-        it.split(":")
+      ENV["GFONK_REPOS"].split(",").map do |repo|
+        repo.split(":")
       end
     end
   end

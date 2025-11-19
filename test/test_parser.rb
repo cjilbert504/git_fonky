@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-class TestGitFonkyParser < Minitest::Test
+class TestParser < Minitest::Test
   def test_parse_env
     ENV["GFONK_REPOS"] = "repo1,repo2:staging"
 
@@ -17,6 +17,6 @@ class TestGitFonkyParser < Minitest::Test
       }
     }
 
-    assert_equal(config_hash, repo_hash.config)
+    assert_equal(config_hash, repo_hash)
   end
 end
