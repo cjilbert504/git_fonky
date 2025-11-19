@@ -29,22 +29,22 @@ module GitFonky
     private
 
     def attempt_pull
-      _stdout, _stderr, status = Open3.capture3("git", "pull", @origin_remote, @branch)
+      _stdout, stderr, status = Open3.capture3("git", "pull", @origin_remote, @branch)
 
       if status.success?
         @reporter.announce("pulled", "from", @origin_remote.to_s)
       else
-        raise PullError, @reporter.failed_pull_msg
+        raise PullError, "#{@reporter.failed_pull_msg}\n#{stderr}".yellow
       end
     end
 
     def attempt_push
-      _stdout, _stderr, status = Open3.capture3("git", "push", @fork_remote, @branch)
+      _stdout, stderr, status = Open3.capture3("git", "push", @fork_remote, @branch)
 
       if status.success?
         @reporter.announce("pushed", "to", @fork_remote.to_s)
       else
-        raise PushError, @reporter.failed_push_msg
+        raise PushError, "#{@reporter.failed_push_msg}\n#{stderr}".yellow
       end
     end
   end
