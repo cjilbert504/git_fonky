@@ -6,7 +6,9 @@ require_relative "git_fonky/parser"
 
 module GitFonky
   class Error < StandardError; end
+
   class PullError < Error; end
+
   class PushError < Error; end
 
   GFONK_DIR = ENV["GFONK_DIR"] || "#{Dir.home}/code"
