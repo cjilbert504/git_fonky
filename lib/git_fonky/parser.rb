@@ -16,8 +16,8 @@ module GitFonky
     def parse_gfonk_repos_env_var
       keys = [:repo, :branch, :origin_remote, :fork_remote]
 
-      split_repo_details.each_with_index.to_h do |values, index|
-        [index, keys.zip(values).to_h]
+      split_repo_details.map do |values|
+        keys.zip(values).to_h
       end
     end
 
