@@ -15,7 +15,7 @@ module GitFonky
 
   def self.sync_repos
     Dir.chdir(GFONK_DIR) do
-      Parser.parse_env.values.each do |repo_config|
+      Parser.parse_env.each do |repo_config|
         Repository.new(**repo_config.compact!).sync
         puts "\n" * 3
       end
